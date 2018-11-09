@@ -2,7 +2,7 @@
     "rdocCaptureSettings": 1,
     "settings": {
         "autoStart": false,
-        "commandLine": "-jar jOGL_Engine.jar",
+        "commandLine": "-jar jArch.jar",
         "environment": [
         ],
         "executable": "C:\\Program Files\\Java\\jre1.8.0_191\\bin\\java.exe",
@@ -20,6 +20,6 @@
             "refAllResources": false,
             "verifyMapWrites": false
         },
-        "workingDir": "C:/workspace/java/jOGL_Engine/out/artifacts/jOGL_Engine_jar"
+        "workingDir": "C:/workspace/java/jArch/out/artifacts/jArchEngine"
     }
 }
