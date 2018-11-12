@@ -19,19 +19,19 @@ public class Shader implements Disposable {
 
     /**
      * Create a new {@link Shader} from a shader source file.
-     *
      * @param filePath {@link String} filepath to load the shader's source from.
      * @param type     The {@link ShaderType} of this shader.
      */
-    public Shader(String filePath, ShaderType type) {
+    public Shader( String filePath, ShaderType type ) {
         this.type = type;
 
-        if (readFileSource(filePath)) {
+        if( readFileSource( filePath ) ) {
             compileShaderSource();
 
-            if (errorsPresent()) {
-                System.err.println(getErrors());
-            } else {
+            if( errorsPresent() ) {
+                System.err.println( getErrors() );
+            }
+            else {
                 valid = true;
             }
         }
@@ -40,27 +40,27 @@ public class Shader implements Disposable {
 
     /**
      * Open a file and load the text from it as this Shader's source code.
-     *
      * @param filePath {@link String} filepath to load the shader's source from.
      * @return True if the file was read successfully.
      */
-    private boolean readFileSource(String filePath) {
+    private boolean readFileSource( String filePath ) {
         boolean success = false;
 
         try {
-            Scanner fileScanner = new Scanner(new File(filePath));
+            Scanner fileScanner = new Scanner( new File( filePath ) );
             StringBuilder builder = new StringBuilder();
 
-            while (fileScanner.hasNextLine()) {
-                builder.append(fileScanner.nextLine() + "\n");
+            while( fileScanner.hasNextLine() ) {
+                builder.append( fileScanner.nextLine() + "\n" );
             }
 
             shaderSource = builder.toString();
             fileScanner.close();
             success = true;
-        } catch (FileNotFoundException fnf) {
-            System.err.println("Error reading shader file <" + filePath + ">;");
-            System.err.println(fnf);
+        }
+        catch( FileNotFoundException fnf ) {
+            System.err.println( "Error reading shader file <" + filePath + ">;" );
+            System.err.println( fnf );
         }
 
         return success;
@@ -71,13 +71,15 @@ public class Shader implements Disposable {
      * Call the GL code to compile this shader and load it onto the GPU.
      */
     private void compileShaderSource() {
-        if (type == ShaderType.FRAGMENT)
-            shaderID = glCreateShader(GL_FRAGMENT_SHADER);
-        else if (type == ShaderType.VERTEX)
-            shaderID = glCreateShader(GL_VERTEX_SHADER);
+        if( type == ShaderType.FRAGMENT ) {
+            shaderID = glCreateShader( GL_FRAGMENT_SHADER );
+        }
+        else if( type == ShaderType.VERTEX ) {
+            shaderID = glCreateShader( GL_VERTEX_SHADER );
+        }
 
-        glShaderSource(shaderID, shaderSource);
-        glCompileShader(shaderID);
+        glShaderSource( shaderID, shaderSource );
+        glCompileShader( shaderID );
     }
 
     /**
@@ -86,11 +88,11 @@ public class Shader implements Disposable {
     private boolean errorsPresent() {
         boolean errors = false;
 
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            IntBuffer pInt = stack.mallocInt(1);
-            glGetShaderiv(shaderID, GL_COMPILE_STATUS, pInt);
+        try( MemoryStack stack = MemoryStack.stackPush() ) {
+            IntBuffer pInt = stack.mallocInt( 1 );
+            glGetShaderiv( shaderID, GL_COMPILE_STATUS, pInt );
 
-            if (pInt.get() != GL_TRUE) {
+            if( pInt.get() != GL_TRUE ) {
                 errors = true;
             }
         }
@@ -104,13 +106,13 @@ public class Shader implements Disposable {
     private String getErrors() {
         StringBuilder error = new StringBuilder();
 
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            IntBuffer pLength = stack.mallocInt(1);
-            ByteBuffer pBuffer = stack.malloc(512);
-            glGetShaderInfoLog(shaderID, pLength, pBuffer);
+        try( MemoryStack stack = MemoryStack.stackPush() ) {
+            IntBuffer pLength = stack.mallocInt( 1 );
+            ByteBuffer pBuffer = stack.malloc( 512 );
+            glGetShaderInfoLog( shaderID, pLength, pBuffer );
 
-            for (int i = 0; i < pLength.get(0); i++) {
-                error.append((char) pBuffer.get(i));
+            for( int i = 0; i < pLength.get( 0 ); i++ ) {
+                error.append( ( char ) pBuffer.get( i ) );
             }
         }
 
@@ -137,6 +139,6 @@ public class Shader implements Disposable {
      */
     @Override
     public void dispose() {
-        glDeleteShader(shaderID);
+        glDeleteShader( shaderID );
     }
 }

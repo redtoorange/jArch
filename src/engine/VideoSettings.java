@@ -16,15 +16,16 @@ public class VideoSettings {
         VideoSettings vs = new VideoSettings();
 
         try {
-            FileReader settingsFile = new FileReader("assets/settings.json");
+            FileReader settingsFile = new FileReader( "assets/settings.json" );
             JsonParser parser = new JsonParser();
-            JsonElement root = parser.parse(settingsFile);
-            JsonObject jsonObject = root.getAsJsonObject().get("videoSettings").getAsJsonObject();
-            vs.title = jsonObject.get("title").getAsString();
-            vs.width = jsonObject.get("width").getAsInt();
-            vs.height = jsonObject.get("height").getAsInt();
-            vs.vsync = jsonObject.get("vsync").getAsInt() > 0;
-        } catch (Exception e) {
+            JsonElement root = parser.parse( settingsFile );
+            JsonObject jsonObject = root.getAsJsonObject().get( "videoSettings" ).getAsJsonObject();
+            vs.title = jsonObject.get( "title" ).getAsString();
+            vs.width = jsonObject.get( "width" ).getAsInt();
+            vs.height = jsonObject.get( "height" ).getAsInt();
+            vs.vsync = jsonObject.get( "vsync" ).getAsInt() > 0;
+        }
+        catch( Exception e ) {
             vs.title = "Default Settings";
             vs.width = 800;
             vs.height = 600;
@@ -34,7 +35,7 @@ public class VideoSettings {
         return vs;
     }
 
-    public static void WriteToFile(VideoSettings settings){
+    public static void WriteToFile( VideoSettings settings ) {
         // STUB
     }
 }

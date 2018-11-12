@@ -14,25 +14,23 @@ public class ShaderProgram implements Disposable {
 
     /**
      * Create a new ShaderProgram form existing {@link Shader}s.  Does NOT dispose of the {@link Shader}s.
-     *
      * @param vertexShader   {@link Shader} to use as the vertex shader.
      * @param fragmentShader {@link Shader} to use as the fragment shader.
      */
-    public ShaderProgram(Shader vertexShader, Shader fragmentShader) {
-        process(vertexShader, fragmentShader);
+    public ShaderProgram( Shader vertexShader, Shader fragmentShader ) {
+        process( vertexShader, fragmentShader );
     }
 
     /**
      * Create a new {@link ShaderProgram} from shader source files.  Loads and disposes of the {@link Shader}s.
-     *
      * @param vertexPath   {@link String} to use as the file path to the vertex shader.
      * @param fragmentPath {@link String} to use as the file path to the fragment shader.
      */
-    public ShaderProgram(String vertexPath, String fragmentPath) {
-        Shader vertexShader = new Shader(vertexPath, ShaderType.VERTEX);
-        Shader fragmentShader = new Shader(fragmentPath, ShaderType.FRAGMENT);
+    public ShaderProgram( String vertexPath, String fragmentPath ) {
+        Shader vertexShader = new Shader( vertexPath, ShaderType.VERTEX );
+        Shader fragmentShader = new Shader( fragmentPath, ShaderType.FRAGMENT );
 
-        process(vertexShader, fragmentShader);
+        process( vertexShader, fragmentShader );
 
 //        vertexShader.dispose();
 //        fragmentShader.dispose();
@@ -41,17 +39,17 @@ public class ShaderProgram implements Disposable {
 
     /**
      * Validate {@link Shader}s and link them, output errors if needed.
-     *
      * @param vertexShader   {@link Shader} to use as the vertex shader.
      * @param fragmentShader {@link Shader} to use as the fragment shader.
      */
-    private void process(Shader vertexShader, Shader fragmentShader) {
-        if (vertexShader.isValid() && fragmentShader.isValid()) {
-            linkProgram(vertexShader, fragmentShader);
+    private void process( Shader vertexShader, Shader fragmentShader ) {
+        if( vertexShader.isValid() && fragmentShader.isValid() ) {
+            linkProgram( vertexShader, fragmentShader );
 
-            if (errorsPresent()) {
-                System.err.println(getErrors());
-            } else {
+            if( errorsPresent() ) {
+                System.err.println( getErrors() );
+            }
+            else {
                 valid = true;
             }
         }
@@ -59,15 +57,14 @@ public class ShaderProgram implements Disposable {
 
     /**
      * Call the GL code to attach and link the shades and shaderProgram
-     *
      * @param vertexShader   {@link Shader} to use as the vertex shader.
      * @param fragmentShader {@link Shader} to use as the fragment shader.
      */
-    private void linkProgram(Shader vertexShader, Shader fragmentShader) {
+    private void linkProgram( Shader vertexShader, Shader fragmentShader ) {
         shaderProgramID = glCreateProgram();
-        glAttachShader(shaderProgramID, vertexShader.getShaderID());
-        glAttachShader(shaderProgramID, fragmentShader.getShaderID());
-        glLinkProgram(shaderProgramID);
+        glAttachShader( shaderProgramID, vertexShader.getShaderID() );
+        glAttachShader( shaderProgramID, fragmentShader.getShaderID() );
+        glLinkProgram( shaderProgramID );
     }
 
 
@@ -77,13 +74,13 @@ public class ShaderProgram implements Disposable {
     private boolean errorsPresent() {
         boolean errors = false;
 
-        try (MemoryStack stack = MemoryStack.stackPush()) {
+        try( MemoryStack stack = MemoryStack.stackPush() ) {
             // Check to see if it linked
-            IntBuffer pInt = stack.mallocInt(1);
-            glGetProgramiv(shaderProgramID, GL_LINK_STATUS, pInt);
+            IntBuffer pInt = stack.mallocInt( 1 );
+            glGetProgramiv( shaderProgramID, GL_LINK_STATUS, pInt );
 
             // Link failed, see why
-            if (pInt.get() == GL_FALSE) {
+            if( pInt.get() == GL_FALSE ) {
                 errors = true;
             }
         }
@@ -97,13 +94,13 @@ public class ShaderProgram implements Disposable {
     private String getErrors() {
         StringBuilder error = new StringBuilder();
 
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            IntBuffer pLength = stack.mallocInt(1);
-            ByteBuffer pBuffer = stack.malloc(512);
-            glGetShaderInfoLog(shaderProgramID, pLength, pBuffer);
+        try( MemoryStack stack = MemoryStack.stackPush() ) {
+            IntBuffer pLength = stack.mallocInt( 1 );
+            ByteBuffer pBuffer = stack.malloc( 512 );
+            glGetShaderInfoLog( shaderProgramID, pLength, pBuffer );
 
-            for (int i = 0; i < pLength.get(0); i++) {
-                error.append((char) pBuffer.get(i));
+            for( int i = 0; i < pLength.get( 0 ); i++ ) {
+                error.append( ( char ) pBuffer.get( i ) );
             }
         }
 
@@ -125,8 +122,8 @@ public class ShaderProgram implements Disposable {
         return shaderProgramID;
     }
 
-    public void bind(){
-        glUseProgram(shaderProgramID);
+    public void bind() {
+        glUseProgram( shaderProgramID );
     }
 
     /**
@@ -134,6 +131,6 @@ public class ShaderProgram implements Disposable {
      */
     @Override
     public void dispose() {
-        glDeleteProgram(shaderProgramID);
+        glDeleteProgram( shaderProgramID );
     }
 }

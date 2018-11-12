@@ -28,32 +28,32 @@ public class Main {
             0.0f, 0.0f      // top left
     };
 
-    public static void main(String[] args) {
+    public static void main( String[] args ) {
         VideoSettings settings = VideoSettings.LoadFromFile();
 
         Global.EnableGLFW();
-        Window window = new Window(settings.title, settings.width, settings.height, settings.vsync);
+        Window window = new Window( settings.title, settings.width, settings.height, settings.vsync );
 
-        ShaderProgram sp = new ShaderProgram("assets/shaders/sample.vert", "assets/shaders/sample.frag");
-        Mesh m = new Mesh(indices, vertices, uvData);
-        Texture t = new Texture("assets/textures/Kirby.png");
+        ShaderProgram sp = new ShaderProgram( "assets/shaders/sample.vert", "assets/shaders/sample.frag" );
+        Mesh m = new Mesh( indices, vertices, uvData );
+        Texture t = new Texture( "assets/textures/Kirby.png" );
 
-        glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
+        glClearColor( 0.4f, 0.4f, 0.4f, 1.0f );
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-        while (!glfwWindowShouldClose(window.getNativeID())) {
+        while( !glfwWindowShouldClose( window.getNativeID() ) ) {
             glfwPollEvents();
 
 
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear( GL_COLOR_BUFFER_BIT );
 
             t.bind();
             sp.bind();
             m.draw();
 
-            glfwSwapBuffers(window.getNativeID());
+            glfwSwapBuffers( window.getNativeID() );
         }
 
         t.dispose();

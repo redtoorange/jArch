@@ -1,7 +1,5 @@
 package engine.rendering.material;
 
-import static org.lwjgl.opengl.GL40.*;
-
 public class TextureRegion {
     private Texture texture;
     private int offsetX;
@@ -9,7 +7,7 @@ public class TextureRegion {
     private int width;
     private int height;
 
-    public void bind(){
+    public void bind() {
         texture.bind();
     }
 }
