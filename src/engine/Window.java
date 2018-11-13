@@ -48,7 +48,7 @@ public class Window {
         if( (OS.indexOf( "mac" ) >= 0) || (OS.indexOf( "darwin" ) >= 0) ) {
             glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
             glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
-            glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_FORWARD_COMPAT );
+            glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE );
         }
         else if( OS.indexOf( "win" ) >= 0 ) {
             glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
