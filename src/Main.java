@@ -63,6 +63,8 @@ public class Main {
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
         Timer timer = new Timer();
+        timer.printFPS( true );
+
         while( !glfwWindowShouldClose( window.getNativeID() ) ) {
             glfwPollEvents();
 
@@ -79,7 +81,6 @@ public class Main {
             spriteRenderer.draw( sprite2 );
 
             spriteRenderer.end();
-
             glfwSwapBuffers( window.getNativeID() );
         }
 

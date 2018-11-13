@@ -11,7 +11,7 @@
     "title" : "LWJGL Engine Test",
     "width"  : 800,
     "height" : 600,
-    "vsync" : 1
+    "vsync" : 0
   },
 
   "audoSettings" :{

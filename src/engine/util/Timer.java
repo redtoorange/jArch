@@ -26,8 +26,15 @@ public class Timer {
     private long timeNow;
     private long timePrev;
 
+    private boolean printFPS = false;
+    private int lastFPS = 0;
+    private int frames = 0;
+    private float elapsed = 0.0f;
+
+
     public Timer() {
-//        timeNow = timePrev = System.currentTimeMillis();
+        timeNow = timePrev = System.nanoTime();
+        ;
     }
 
     public float getDeltaTime() {
@@ -39,6 +46,21 @@ public class Timer {
         deltaTime = (timeNow - timePrev) / 1_000_000_000.0f;
         timePrev = timeNow;
 
+        if( printFPS ) {
+            frames++;
+            elapsed += deltaTime;
+            if( elapsed >= 1.0f ) {
+                elapsed -= 1.0f;
+                lastFPS = frames;
+                frames = 0;
+                System.out.println( "FPS: " + lastFPS );
+            }
+        }
+
         return deltaTime;
+    }
+
+    public void printFPS( boolean enabled ) {
+        printFPS = enabled;
     }
 }

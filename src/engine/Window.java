@@ -44,15 +44,17 @@ public class Window {
         glfwWindowHint( GLFW_VISIBLE, GLFW_FALSE );
         glfwWindowHint( GLFW_RESIZABLE, GLFW_TRUE );
 
+        // Create an OS specific context.
         String OS = System.getProperty( "os.name", "generic" ).toLowerCase( Locale.ENGLISH );
         if( (OS.indexOf( "mac" ) >= 0) || (OS.indexOf( "darwin" ) >= 0) ) {
             glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
             glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
-            glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE );
+            glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE );
+            glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
         }
         else if( OS.indexOf( "win" ) >= 0 ) {
-            glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
-            glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 0 );
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
             glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
         }
         else if( OS.indexOf( "nux" ) >= 0 ) {
@@ -62,8 +64,8 @@ public class Window {
         }
 
         window = glfwCreateWindow( width, height, title, 0, 0 );
-
         glfwMakeContextCurrent( window );
+
 
         if( vsync ) {
             glfwSwapInterval( 1 );
@@ -72,9 +74,9 @@ public class Window {
             glfwSwapInterval( 0 );
         }
 
+
         glfwShowWindow( window );
         GL.createCapabilities();
-
         glfwSetWindowSizeCallback( window, this::handleResize );
     }
 
