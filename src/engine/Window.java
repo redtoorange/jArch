@@ -23,7 +23,10 @@ package engine;
 
 import org.lwjgl.opengl.GL;
 
+import java.util.Locale;
+
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.glViewport;
 
 
 public class Window {
@@ -38,13 +41,25 @@ public class Window {
      */
     public Window( String title, int width, int height, boolean vsync ) {
         glfwDefaultWindowHints();
-
         glfwWindowHint( GLFW_VISIBLE, GLFW_FALSE );
         glfwWindowHint( GLFW_RESIZABLE, GLFW_TRUE );
 
-        glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
-        glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 0 );
-        glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+        String OS = System.getProperty( "os.name", "generic" ).toLowerCase( Locale.ENGLISH );
+        if( (OS.indexOf( "mac" ) >= 0) || (OS.indexOf( "darwin" ) >= 0) ) {
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
+            glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_FORWARD_COMPAT );
+        }
+        else if( OS.indexOf( "win" ) >= 0 ) {
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 0 );
+            glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+        }
+        else if( OS.indexOf( "nux" ) >= 0 ) {
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+            glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
+            glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+        }
 
         window = glfwCreateWindow( width, height, title, 0, 0 );
 
@@ -59,6 +74,8 @@ public class Window {
 
         glfwShowWindow( window );
         GL.createCapabilities();
+
+        glfwSetWindowSizeCallback( window, this::handleResize );
     }
 
     /**
@@ -67,5 +84,9 @@ public class Window {
      */
     public long getNativeID() {
         return window;
+    }
+
+    private void handleResize( long window, int width, int height ) {
+        glViewport( 0, 0, width, height );
     }
 }

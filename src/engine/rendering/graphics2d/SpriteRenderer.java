@@ -32,27 +32,54 @@ public class SpriteRenderer {
     private Texture currentTexture;
     private ArrayList< Sprite > sprites;
     private Camera currentCamera;
+    private boolean started;
 
     public SpriteRenderer() {
         sprites = new ArrayList< Sprite >();
+        started = false;
     }
 
-    public void begin( Camera camera ) {
-        currentShader = null;
+    /**
+     * Begin a new Rendering Batch.  The camera passed in will be used for the
+     * projection and view matrices for the shader.
+     * @param camera        Camera to use for sending matrix data to the shader.
+     * @param shaderProgram Shader to use when rendering this batch.
+     */
+    public void begin( Camera camera, ShaderProgram shaderProgram ) {
+        assert !started : "SpriteRenderer already started.";
+
+        started = true;
         currentTexture = null;
-        currentCamera = camera;
         sprites.clear();
+
+        currentShader = shaderProgram;
+        currentCamera = camera;
     }
 
-    public void setShader( ShaderProgram sp ) {
-        if( sp != currentShader ) {
+    /**
+     * Change the batch's ShaderProgram to a new shader, this will cause the
+     * batch to be flushed and rendered using the OLD shader before the new
+     * one is set.
+     * @param shaderProgram new ShaderProgram for this batch to use.
+     */
+    public void setShader( ShaderProgram shaderProgram ) {
+        if( shaderProgram != currentShader ) {
             flush();
         }
 
-        currentShader = sp;
+        currentShader = shaderProgram;
     }
 
+    /**
+     * Add a Sprite to the rendering batch.  The SpriteRenderer attempts to reduce
+     * the number of texture swaps and draw calls.  If the texture for the new Sprite
+     * is different then the one used by the rest of the batch, the batch will be flushed
+     * and rendered.
+     * @param sprite Sprite to add to the batch.
+     */
     public void draw( Sprite sprite ) {
+        assert started : "SpriteRendered not started.";
+
         if( sprite.getSpriteTexture() != currentTexture ) {
             flush();
             currentTexture = sprite.getSpriteTexture();
@@ -61,27 +88,49 @@ public class SpriteRenderer {
         sprites.add( sprite );
     }
 
-    private void flush() {
-        if( sprites.isEmpty() || currentTexture == null || currentShader == null || currentCamera == null ) {
-            return;
-        }
-
-        currentTexture.bind();
-        currentShader.bind();
-        currentShader.setUniformMat4f( "projection", currentCamera.getProjectionMatrix() );
-        currentShader.setUniformMat4f( "view", currentCamera.getViewMatrix() );
-
-        for( Sprite s : sprites ) {
-            currentShader.setUniformMat4f( "modelTransform", s.getModelTransform() );
-            s.render();
-        }
-    }
-
+    /** Complete the batch and cleanup. */
     public void end() {
         flush();
         currentShader = null;
         currentTexture = null;
         currentCamera = null;
         sprites.clear();
+        started = false;
+    }
+
+    /** Validate the rendering state and render all Sprites in the batch. */
+    private void flush() {
+        if( !isStateValid() ) {
+            return;
+        }
+
+        prepBatch();
+
+        for( Sprite sprite : sprites )
+            renderSprite( sprite );
+
+        sprites.clear();
+    }
+
+    /** Bind the Shader and Texture, upload uniforms. */
+    private void prepBatch() {
+        currentTexture.bind();
+        currentShader.bind();
+        currentShader.setUniformMat4f( "projection", currentCamera.getProjectionMatrix() );
+        currentShader.setUniformMat4f( "view", currentCamera.getViewMatrix() );
+    }
+
+    /** Check the state of the rendered is valid. */
+    private boolean isStateValid() {
+        return started && !sprites.isEmpty() && currentTexture != null && currentShader != null && currentCamera != null;
+    }
+
+    /**
+     * Make the OpenGL draw call for a Sprite.
+     * @param sprite Sprite to render.
+     */
+    private void renderSprite( Sprite sprite ) {
+        currentShader.setUniformMat4f( "modelTransform", sprite.getModelTransform() );
+        sprite.render();
     }
 }

@@ -37,6 +37,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Main {
 
 
+
     public static void main( String[] args ) {
         VideoSettings settings = VideoSettings.LoadFromFile();
 
@@ -61,13 +62,6 @@ public class Main {
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-        glfwSetWindowSizeCallback( window.getNativeID(), new GLFWWindowSizeCallback() {
-            @Override
-            public void invoke( long window, int width, int height ) {
-                glViewport( 0, 0, width, height );
-            }
-        } );
-
         Timer timer = new Timer();
         while( !glfwWindowShouldClose( window.getNativeID() ) ) {
             glfwPollEvents();
@@ -79,8 +73,7 @@ public class Main {
             sprite1.getTransform().rotate( 0, 100 * delta, 0 );
             sprite2.getTransform().rotate( 0, 100 * delta, 0 );
 
-            spriteRenderer.begin( camera );
-            spriteRenderer.setShader( shader );
+            spriteRenderer.begin( camera, shader );
 
             spriteRenderer.draw( sprite1 );
             spriteRenderer.draw( sprite2 );

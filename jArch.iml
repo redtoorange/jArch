@@ -22,7 +22,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="lwjgl" level="project" />
     <orderEntry type="library" name="gson-2.8.5" level="project" />
+    <orderEntry type="library" name="lwjgl-glfw-natives-macos" level="project" />
   </component>
 </module>
