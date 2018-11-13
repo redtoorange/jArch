@@ -19,66 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  *****************************************************************************/
-package engine.rendering;
+package engine.util;
 
-import org.joml.Vector3f;
+public class Timer {
+    private float deltaTime = 0.0f;
+    private long timeNow;
+    private long timePrev;
 
-public class Transform {
-    private Vector3f position;
-    private Vector3f scale;
-    private Vector3f rotation;
-
-    public Transform() {
-        position = new Vector3f( 0, 0, 0 );
-        scale = new Vector3f( 1, 1, 1 );
-        rotation = new Vector3f( 0, 0, 0 );
+    public Timer() {
+//        timeNow = timePrev = System.currentTimeMillis();
     }
 
-    public Vector3f getPosition() {
-        return position;
+    public float getDeltaTime() {
+        return deltaTime;
     }
 
-    public void setPosition( Vector3f position ) {
-        this.position = position;
-    }
+    public float update() {
+        timeNow = System.nanoTime();
+        deltaTime = (timeNow - timePrev) / 1_000_000_000.0f;
+        timePrev = timeNow;
 
-    public void translate( Vector3f delta ) {
-        position.add( delta );
-    }
-
-    public void translate( float dx, float dy, float dz ) {
-        position.add( dx, dy, dz );
-    }
-
-    public Vector3f getScale() {
-        return scale;
-    }
-
-    public void setScale( Vector3f scale ) {
-        this.scale = scale;
-    }
-
-    public void scale( Vector3f delta ) {
-        scale.add( delta );
-    }
-
-    public void scale( float dx, float dy, float dz ) {
-        scale.add( dx, dy, dz );
-    }
-
-    public Vector3f getRotation() {
-        return rotation;
-    }
-
-    public void setRotation( Vector3f rotation ) {
-        this.rotation = rotation;
-    }
-
-    public void rotate( Vector3f delta ) {
-        rotation.add( delta );
-    }
-
-    public void rotate( float dx, float dy, float dz ) {
-        rotation.add( dx, dy, dz );
+        return deltaTime;
     }
 }

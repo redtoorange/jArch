@@ -158,14 +158,14 @@ public class ShaderProgram implements Disposable {
     }
 
 
-    private int getLocation(String name){
-        return glGetUniformLocation(shaderProgramID, name );
+    private int getLocation( String name ) {
+        return glGetUniformLocation( shaderProgramID, name );
     }
 
-    public void setUniformMat4f( String name, Matrix4f data ){
+    public void setUniformMat4f( String name, Matrix4f data ) {
         int location = getLocation( name );
 
-        try(MemoryStack stack = MemoryStack.stackPush()){
+        try( MemoryStack stack = MemoryStack.stackPush() ) {
             FloatBuffer buffer = stack.mallocFloat( 16 );
             data.get( buffer );
             glUniformMatrix4fv( location, false, buffer );

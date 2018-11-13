@@ -25,17 +25,17 @@ import engine.rendering.Transform;
 import org.joml.Matrix4f;
 
 abstract public class Camera {
-    abstract public Matrix4f getViewMatrix();
-    abstract public Matrix4f getProjectionMatrix();
-
-
     private Transform transform;
 
-    public Transform getTransform(){
+    abstract public Matrix4f getViewMatrix();
+
+    abstract public Matrix4f getProjectionMatrix();
+
+    public Transform getTransform() {
         return transform;
     }
 
-    public void setTransform(Transform transform){
+    public void setTransform( Transform transform ) {
         this.transform = transform;
     }
 }

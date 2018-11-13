@@ -43,7 +43,7 @@ public class QuadMesh extends Mesh {
             0.0f, 0.0f      // top left
     };
 
-    public QuadMesh(){
-        super(indices, vertices, uvData);
+    public QuadMesh() {
+        super( indices, vertices, uvData );
     }
 }
