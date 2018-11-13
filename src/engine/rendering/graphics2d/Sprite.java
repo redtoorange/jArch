@@ -19,17 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  *****************************************************************************/
-package engine.rendering;
+package engine.rendering.graphics2d;
 
+import engine.rendering.Transform;
 import engine.rendering.material.Texture;
 import engine.rendering.mesh.Mesh;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class Sprite {
-    private static Mesh spriteMesh;
+    private Mesh spriteMesh;
     private Texture spriteTexture;
-
     private Transform transform;
+
+    public Sprite(Texture texture){
+        this.transform = new Transform();
+        this.spriteTexture = texture;
+        this.spriteMesh = new QuadMesh();
+    }
 
     public Matrix4f getModelTransform() {
         Matrix4f mat = new Matrix4f();
@@ -58,4 +65,23 @@ public class Sprite {
     public void setTransform( Transform transform ) {
         this.transform = transform;
     }
+
+    public void translate(float dx, float dy, float dz){
+        Vector3f temp = transform.getPosition();
+        temp.add( dx, dy, dz );
+        transform.setPosition( temp );
+    }
+
+    public void scale(float dx, float dy, float dz){
+        Vector3f temp = transform.getScale();
+        temp.add( dx, dy, dz );
+        transform.setScale( temp );
+    }
+
+    public void rotate(float dx, float dy, float dz){
+        Vector3f temp = transform.getRotation();
+        temp.add( dx, dy, dz );
+        transform.setRotation( temp );
+    }
+
 }

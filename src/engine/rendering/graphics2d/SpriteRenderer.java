@@ -19,11 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  *****************************************************************************/
-package engine.rendering;
+package engine.rendering.graphics2d;
 
+import engine.rendering.camera.Camera;
 import engine.rendering.material.Texture;
 import engine.rendering.shader.ShaderProgram;
-import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 
@@ -31,21 +31,17 @@ public class SpriteRenderer {
     private ShaderProgram currentShader;
     private Texture currentTexture;
     private ArrayList< Sprite > sprites;
-    private Matrix4f view;
-    private Matrix4f proj;
-
+    private Camera currentCamera;
 
     public SpriteRenderer() {
         sprites = new ArrayList< Sprite >();
     }
 
-    public void begin( Matrix4f view, Matrix4f proj ) {
+    public void begin( Camera camera ) {
         currentShader = null;
         currentTexture = null;
+        currentCamera = camera;
         sprites.clear();
-
-        this.view = view;
-        this.proj = proj;
     }
 
     public void setShader( ShaderProgram sp ) {
@@ -66,22 +62,26 @@ public class SpriteRenderer {
     }
 
     private void flush() {
-        if( sprites.isEmpty() || currentTexture == null || currentShader == null ) {
+        if( sprites.isEmpty() || currentTexture == null || currentShader == null || currentCamera == null ) {
             return;
         }
 
         currentTexture.bind();
         currentShader.bind();
-        //currentShader.setUniformMat4f("projection", proj);
-        //currentShader.setUniformMat4f("view", view);
+        currentShader.setUniformMat4f( "projection", currentCamera.getProjectionMatrix() );
+        currentShader.setUniformMat4f( "view", currentCamera.getViewMatrix() );
 
         for( Sprite s : sprites ) {
-            //currentShader.setUniformMat4f("transform", s.getModelTransform());
+            currentShader.setUniformMat4f( "modelTransform", s.getModelTransform() );
             s.render();
         }
     }
 
     public void end() {
-
+        flush();
+        currentShader = null;
+        currentTexture = null;
+        currentCamera = null;
+        sprites.clear();
     }
 }

@@ -19,42 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  *****************************************************************************/
-package engine.rendering;
+package engine.rendering.camera;
 
-import org.joml.Vector3f;
+import engine.rendering.Transform;
+import org.joml.Matrix4f;
 
-public class Transform {
-    private Vector3f position;
-    private Vector3f scale;
-    private Vector3f rotation;
+abstract public class Camera {
+    abstract public Matrix4f getViewMatrix();
+    abstract public Matrix4f getProjectionMatrix();
 
-    public Transform() {
-        position = new Vector3f( 0, 0, 0 );
-        scale = new Vector3f( 1, 1, 1 );
-        rotation = new Vector3f( 0, 0, 0 );
+
+    private Transform transform;
+
+    public Transform getTransform(){
+        return transform;
     }
 
-    public Vector3f getPosition() {
-        return position;
-    }
-
-    public void setPosition( Vector3f position ) {
-        this.position = position;
-    }
-
-    public Vector3f getScale() {
-        return scale;
-    }
-
-    public void setScale( Vector3f scale ) {
-        this.scale = scale;
-    }
-
-    public Vector3f getRotation() {
-        return rotation;
-    }
-
-    public void setRotation( Vector3f rotation ) {
-        this.rotation = rotation;
+    public void setTransform(Transform transform){
+        this.transform = transform;
     }
 }

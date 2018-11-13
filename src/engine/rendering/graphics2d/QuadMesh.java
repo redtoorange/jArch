@@ -19,42 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  *****************************************************************************/
-package engine.rendering;
+package engine.rendering.graphics2d;
 
-import org.joml.Vector3f;
+import engine.rendering.mesh.Mesh;
 
-public class Transform {
-    private Vector3f position;
-    private Vector3f scale;
-    private Vector3f rotation;
+public class QuadMesh extends Mesh {
+    private static float[] vertices = {
+            0.5f, 0.5f, 0.0f,       // top right
+            0.5f, -0.5f, 0.0f,      // bottom right
+            -0.5f, -0.5f, 0.0f,     // bottom left
+            -0.5f, 0.5f, 0.0f       // top left
+    };
 
-    public Transform() {
-        position = new Vector3f( 0, 0, 0 );
-        scale = new Vector3f( 1, 1, 1 );
-        rotation = new Vector3f( 0, 0, 0 );
-    }
+    private static int[] indices = {
+            0, 1, 3,
+            1, 2, 3
+    };
 
-    public Vector3f getPosition() {
-        return position;
-    }
+    private static float[] uvData = {
+            1.0f, 0.0f,     // top right
+            1.0f, 1.0f,     // bottom right
+            0.0f, 1.0f,     // bottom left
+            0.0f, 0.0f      // top left
+    };
 
-    public void setPosition( Vector3f position ) {
-        this.position = position;
-    }
-
-    public Vector3f getScale() {
-        return scale;
-    }
-
-    public void setScale( Vector3f scale ) {
-        this.scale = scale;
-    }
-
-    public Vector3f getRotation() {
-        return rotation;
-    }
-
-    public void setRotation( Vector3f rotation ) {
-        this.rotation = rotation;
+    public QuadMesh(){
+        super(indices, vertices, uvData);
     }
 }

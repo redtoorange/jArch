@@ -22,9 +22,11 @@
 package engine.rendering.shader;
 
 import engine.util.Disposable;
+import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL40.*;
@@ -153,5 +155,20 @@ public class ShaderProgram implements Disposable {
     @Override
     public void dispose() {
         glDeleteProgram( shaderProgramID );
+    }
+
+
+    private int getLocation(String name){
+        return glGetUniformLocation(shaderProgramID, name );
+    }
+
+    public void setUniformMat4f( String name, Matrix4f data ){
+        int location = getLocation( name );
+
+        try(MemoryStack stack = MemoryStack.stackPush()){
+            FloatBuffer buffer = stack.mallocFloat( 16 );
+            data.get( buffer );
+            glUniformMatrix4fv( location, false, buffer );
+        }
     }
 }
